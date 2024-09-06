@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>RSA Key Generator</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <style>
+    body {
+        font-family: "Lato", sans-serif;
+        height: 290px;
+    }
+    button.primary {
+        -webkit-box-pack: center !important;
+        -ms-flex-pack: center !important;
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        margin: 0px !important;
+        position: relative !important;
+        display: -webkit-inline-box !important;
+        display: -moz-inline-box !important;
+        display: -ms-inline-flexbox !important;
+        display: -webkit-inline-flex !important;
+        display: inline-flex !important;
+        -webkit-align-items: center !important;
+        align-items: center !important;
+        -webkit-justify-content: center !important;
+        justify-content: center !important;
+        height: 40px !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        border: none !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        outline: none !important;
+        text-decoration: none !important;
+        -moz-box-sizing: border-box !important;
+        box-sizing: border-box !important;
+        -ms-touch-action: manipulation !important;
+        touch-action: manipulation !important;
+        background: #1865f2 !important;
+        color: #ffffff !important;
+        margin-right: 10px !important;
+    }
+    button.primary:hover {
+        box-shadow: 0 0 0 1px #FFF, 0 0 0 3px #1865f2;
+    }
+    button.primary span {
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        font-family: Lato, sans-serif !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        display: -webkit-box !important;
+        display: -moz-box !important;
+        display: -ms-flexbox !important;
+        display: -webkit-flex !important;
+        display: flex !important;
+        -webkit-align-items: center !important;
+        align-items: center !important;
+        font-weight: bold !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        pointer-events: none !important;
+    }
+    
+    .key-textarea {
+        width:100%;
+        margin-top: 6px;
+        background: #eee;
+        font-family:monospace;
+    }
+    </style>
+    </head>
+    <body>
+
+    <button id="generateButton" class="primary"><span>Generate</span></button>
+    <span id="timeReport" style="font-style:italic"></span>
+    <div style="margin-top:10px;">
+    <label>Private key:</label><br>
+    <textarea id="privateKey" readonly rows="6" class="key-textarea">⬆ Click generate to see your private key.</textarea>
+    </div>
+    <div style="margin-top:10px;">
+    <label>Public key:</label><br>
+    <textarea id="publicKey" readonly rows="4" class="key-textarea">⬆ Click generate to see your public key.</textarea>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.min.js"></script>
+    <script>
+// Code based on http://travistidwell.com/jsencrypt/demo/
+var generateKeys = function () {
+    var timeReport = document.getElementById("timeReport");
+    var crypt = new JSEncrypt({default_key_size: 1024});
+    var dt = new Date();
+    var time = -(dt.getTime());
+    timeReport.innerHTML = "Generating..";
+    var loadTimer = setInterval(function () {
+        timeReport.innerHTML += ".";
+    }, 500);
+    crypt.getKey(function () {
+        clearInterval(loadTimer);
+        dt = new Date();
+        time += (dt.getTime());
+        timeReport.innerHTML = 'Generated in ' + time + ' ms';
+        document.getElementById("privateKey").value = crypt.getPrivateKey();
+        document.getElementById("publicKey").value = crypt.getPublicKey();
+    });
+};
+
+document.getElementById("generateButton").addEventListener("click", generateKeys);
+
+    </script>
+    </body>
+</html>
